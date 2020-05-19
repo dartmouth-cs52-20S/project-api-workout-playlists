@@ -38,8 +38,6 @@ No setup involved for the APIs on a user end.
 Getting an API key
 
 ## Deployment
-
-TODO: how to deploy the project
 The APIs are working in the background so there's no deployment on this side
 
 ## Authors
