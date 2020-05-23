@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import { requireAuth, requireSignin } from './services/passport';
-import s3Handle from './services/s3';
-import user from './controllers/user_controller';
-/* To add Post and User Controller */
-
+import spotifyCredentials from 'router.js';
 
 const router = Router();
 
@@ -11,18 +7,19 @@ router.get('/', (req, res) => {
   res.json({ message: 'Hello World' });
 });
 
-// /your routes will go here
-/*
-To Add content here
+// comments will be needed in deployment
+router.get('/spotify-credentials', (req, res, next) => {
+  // const clientId = process.env.clientId;
+  // const clientSecret = process.env.clientSecret;
+  // const redirectUri = process.env.redirectUri;
+  // const spotifyCredentials = { clientId, clientSecret, redirectUri };
+  res.json(spotifyCredentials);
+});
 
-*/
+router.route('/authorize')
+  .put(setUser);
 
-router.route('/auth')
-  .get(requireAuth, user);
-
-router.post('/signin', requireSignin, user.signIn);
-router.post('/signup', user.signUp);
-
-router.get('/sign-s3', s3Handle);
+router.route('/preferences')
+  .put(userPreferences);
 
 export default router;

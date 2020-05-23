@@ -3,6 +3,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
+import apiRouter from './router';
+
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/tempo';
+mongoose.connect(mongoURI);
+mongoose.Promise = global.Promise;
 
 // initialize
 const app = express();
@@ -26,12 +32,7 @@ app.set('views', path.join(__dirname, '../src/views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// additional init stuff should go before hitting the routing
-
-// default index route
-app.get('/', (req, res) => {
-  res.send('hello world');
-});
+app.use('/api', apiRouter);
 
 // START THE SERVER
 // =============================================================================
