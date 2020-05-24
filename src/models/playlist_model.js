@@ -1,3 +1,5 @@
+import mongoose, { Schema } from 'mongoose';
+
 const PlaylistSchema = new Schema({
 
     user: { type: Schema.Types.ObjectId, ref: 'User' },
