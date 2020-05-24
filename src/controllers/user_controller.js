@@ -1,56 +1,93 @@
-import jwt from 'jwt-simple';
-import dotenv from 'dotenv';
 import User from '../models/user_model';
+import axios from 'axios';
 
-dotenv.config({ silent: true });
+const spotifyUrl = 'https://api.spotify.com/api';
 
-// and then the secret is usable this way:
-// process.env.AUTH_SECRET;
+export const setUser = (req, res, next) => {
+  const { accessToken } = req.body;
+  const { refreshToken } = req.body;
 
-
-export const signin = (req, res, next) => {
-  res.send({ token: tokenForUser(req.user), message: 'Sign in Successful!', userId: req.user.id });
-};
-
-export const signup = (req, res, next) => {
-  const { email } = req.body;
-  const { username } = req.body;
-  const { password } = req.body;
-
-  if (!email || !password) {
-    res.status(422).send('You must provide email and password');
+  if (!accessToken|| !refreshToken) {
+    res.status(422).send('error');
   } else {
-    // got help from TA Thomas to clean up this method, later helped Katrina Yu talk through what is happening below.
-    User.findOne({ email })
-      .then((foundUser) => {
-        // if foundUser exists, then send a 400 and say it already exists
-        // additional reference for code below https://vegibit.com/node-js-mongodb-user-registration/
-        if (foundUser) {
-          res.status(400).send('This user already exists!');
-        } else {
-          const user = new User();
-          user.email = email;
-          user.username = username;
-          user.password = password;
-
-          user.save()
-            .then((result) => {
-              res.send({ token: tokenForUser(result), message: 'Sign up Successful!', userId: user.id });
-            })
-            .catch((error) => {
-              res.status(500).json({ error });
-            });
-        }
+    axios.get(`${spotifyUrl}/v1/me`, accessToken)
+      .then((response) => {
+        const spotifyID = response.id
+        User.findOne({ spotifyID })
+          .then((result) => {
+            if (result) {
+              User.findOneAndUpdate(
+                { spotifyID },
+                {
+                  $set:
+                         {
+                          accessToken,
+                          refreshToken,
+                         },
+                },
+                { new: true },
+              ).then((result) => {
+                  res.send(result);
+                }).catch((error) => {
+                  res.status(500).json({ error });
+                });
+            } else {
+              const user = new User({
+                accessToken,
+                refreshToken,
+                spotifyID,
+              });
+              user.save()
+                .then(() => {
+                  res.json({ message: 'user saved'})
+                })
+                .catch((error) => {
+                  res.status(500).json({ error });
+                });
+            }
+          })
+          .catch((error) => {
+            res.status(500).json({ error });
+          });
       })
-      // catch other errors
       .catch((error) => {
-        res.status(500).json({ error });
+        console.log(error);
       });
   }
 };
 
+export const setUserPreferences = (req, res, next) => {
+  const { spotifyID } = req.body;
+  const { genres } = req.body;
+  const { acousticness } = req.body;
+  const { danceability } = req.body;
+  const { energy } = req.body;
+  const { instrumentalness } = req.body;
+  const { liveness } = req.body;
+  const { loudness } = req.body;
+  const { popularity } = req.body;
+  const { valence } = req.body;
 
-function tokenForUser(user) {
-  const timestamp = new Date().getTime();
-  return jwt.encode({ sub: user.id, iat: timestamp }, process.env.AUTH_SECRET);
-}
+  User.findOneAndUpdate(
+    { spotifyID },
+    {
+      $set:
+             {
+              genres,
+              acousticness,
+              danceability,
+              energy,
+              instrumentalness,
+              liveness,
+              loudness,
+              popularity,
+              valence,
+             },
+    },
+    { new: true },
+  ).then((result) => {
+      res.send(result);
+    }).catch((error) => {
+      res.status(500).json({ error });
+    });
+};
