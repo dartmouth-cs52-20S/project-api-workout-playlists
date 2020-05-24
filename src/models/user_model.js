@@ -1,17 +1,30 @@
 import mongoose, { Schema } from 'mongoose';
-import bcrypt from 'bcryptjs';
-import dotenv from 'dotenv';
 
-dotenv.config({ silent: true });
-
-// and then the secret is usable this way:
-// process.env.AUTH_SECRET
-
-// create a UserSchema with a title field
 const UserSchema = new Schema({
-  email: { type: String, unique: true, lowercase: true },
-  username: { type: String },
-  password: { type: String },
+  
+  // will be needed once auth is up and runnign
+  // accessToken: { type: String },
+  // refreshToken: { type: String },
+  
+  spotifyID: {type: String },
+
+  genres: { type: Array }, // array of favorite genres
+
+  // comments describe features in spotify api, but held in booleans
+  
+  // accoustic?
+  acousticness: { type: Boolean }, // confidence measure from 0.0 to 1.0 of whether the track is acoustic
+  // instrumental?
+  instrumentalness: { type: Boolean }, // above 0.5 intended instrumental tracks, but confidence is higher as the value approaches 1.0
+  // live music?
+  liveness: { type: Boolean }, // in api, value above 0.8 provides strong likelihood that the track is live
+  // do you like your music loud?
+  loudness: { type: Boolean }, // values typical range between -60 and 0 db
+  // popular music?
+  popularity: { type: Boolean }, // value between 0 and 100, with 100 being the most popular
+  // positive, upbeat, happy music?
+  valence: { type: Boolean }, // measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track
+
 }, {
   toObject: { virtuals: true },
   toJSON: {
@@ -19,45 +32,13 @@ const UserSchema = new Schema({
     transform(doc, ret, options) {
       ret.id = ret._id;
       delete ret._id;
-      delete ret.password;
-      delete ret.__v;
+      // delete ret.password;
+      // delete ret.__v;
       return ret;
     },
   },
   timestamps: true,
 });
-
-// create UserModel class from schema
-
-
-UserSchema.pre('save', function beforeUserModelSave(next) {
-  // this is a reference to our model
-  // the function runs in some other context so DO NOT bind it
-  const user = this;
-
-  if (!user.isModified('password')) return next();
-  // generate a salt
-  const salt = bcrypt.genSaltSync(10);
-
-  // hash user password with the salt
-  const hash = bcrypt.hashSync(user.password, salt);
-
-  // set password to hashed password
-  user.password = hash;
-  return next();
-});
-
-//  note use of named function rather than arrow notation
-//  this arrow notation is lexically scoped and prevents binding scope, which mongoose relies on
-UserSchema.methods.comparePassword = function comparePassword(candidatePassword, callback) {
-  bcrypt.compare(candidatePassword, this.password, (error, result) => {
-    if (error) {
-      return callback(error);
-    }
-    return callback(null, result);
-  });
-};
-
 
 const UserModel = mongoose.model('User', UserSchema);
 
