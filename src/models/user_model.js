@@ -1,17 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 
 const UserSchema = new Schema({
-  
+
   // will be needed once auth is up and runnign
   // accessToken: { type: String },
   // refreshToken: { type: String },
-  
-  spotifyID: {type: String },
+
+  spotifyID: { type: String },
 
   genres: { type: Array }, // array of favorite genres
 
   // comments describe features in spotify api, but held in booleans
-  
+
   // accoustic?
   acousticness: { type: Boolean }, // confidence measure from 0.0 to 1.0 of whether the track is acoustic
   // instrumental?
