@@ -42,7 +42,6 @@ const UserSchema = new Schema({
   timestamps: true,
 });
 
-// create PostModel class from schema
 const UserModel = mongoose.model('User', UserSchema);
 
 export default UserModel;
