@@ -22,4 +22,10 @@ router.route('/authorize')
 router.route('/preferences')
   .put(userPreferences);
 
+router.route('/newuser')
+  .post(startUser);
+
+router.route('/getuser')
+  .get(getUser);
+
 export default router;
