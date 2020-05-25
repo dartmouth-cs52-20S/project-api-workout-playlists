@@ -39,7 +39,7 @@ export const startUser = (req, res, next) => {
 
 // get user information
 export const getUser = (req, res) => {
-  User.findOne({ spotifyID: req.body.spotifyID })
+  User.findOne({ spotifyID: req.params.spotifyID })
     .then((result) => {
       res.send(result);
     })
