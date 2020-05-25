@@ -22,4 +22,7 @@ router.route('/authorize')
 router.route('/preferences')
   .put(userPreferences);
 
+router.route('/userModel')
+  .put(makeUser);
+
 export default router;
