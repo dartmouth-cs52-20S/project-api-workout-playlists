@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 router.route('/newuser')
   .post(UserController.startUser);
 
-router.route('/getuser')
+router.route('/getuser/:ID')
   .get(UserController.getUser);
 
 export default router;
