@@ -27,7 +27,13 @@ export const startUser = (req, res, next) => {
       popularity,
       valence,
     });
-    user.save();
+    user.save()
+      .then(() => {
+        res.json({ message: 'User created!' });
+      })
+      .catch((error) => {
+        res.status(500).json({ error });
+      });
   }
 };
 
