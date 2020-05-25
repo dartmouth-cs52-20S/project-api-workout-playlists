@@ -28,4 +28,5 @@ router.route('/newuser')
 router.route('/getuser/:ID')
   .get(UserController.getUser);
 
+
 export default router;
