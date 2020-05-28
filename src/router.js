@@ -15,8 +15,8 @@ router.get('/', (req, res) => {
 //   .put(UserController.userPreferences);
 
 // routes for preliminary new user amd getting user
-router.route('/newuser')
-  .post(UserController.startUser);
+router.route('/update')
+  .put(UserController.updateUser);
 
 router.route('/getuser/:ID')
   .get(UserController.getUser);
