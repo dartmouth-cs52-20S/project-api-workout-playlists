@@ -1,14 +1,18 @@
 import axios from 'axios';
-import spotifyCredentials from '../secrets';
+// import spotifyCredentials from '../secrets';
 
 import User from '../models/user_model';
 
 const stateKey = 'spotify_auth_state';
 const request = require('request');
 
-const { clientId } = spotifyCredentials; // Your client id
-const { clientSecret } = spotifyCredentials; // Your secret
-const { redirectUri } = spotifyCredentials; // Your redirect uri
+// const { clientId } = spotifyCredentials; // Your client id
+// const { clientSecret } = spotifyCredentials; // Your secret
+// const { redirectUri } = spotifyCredentials; // Your redirect uri
+
+const clientId = 'ae55627afa544de2b83131f8bd07d685';
+const redirectUri = 'http://localhost:9090/api/callback';
+const clientSecret = 'e87f33cedc0f49d2b38e23aac704567d';
 
 // authorization code returned by the first call and the client secret key
 export const getTokens = (req, res) => {
