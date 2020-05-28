@@ -24,16 +24,16 @@ export const getTokens = (req, res) => {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code,
-      redirectUri,
+      redirectUri: process.env.REDIRECT_URI,
       grant_type: 'authorization_code',
     },
     headers: {
-      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+      Authorization: `Basic ${Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     json: true,
   };
-  console.log(redirectUri);
+  console.log(process.env.REDIRECT_URI);
   console.log(authOptions);
   request.post(authOptions, (error, response, body) => {
     console.log('failed to get tokens :(');
@@ -60,9 +60,9 @@ export const getTokens = (req, res) => {
                 },
                 { new: true },
               ).then(() => {
-                res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
+                res.redirect(`${process.env.REDIRECT_URI}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
               }).catch(() => {
-                res.redirect(`${redirectUri}/done?message=authFailure`);
+                res.redirect(`${process.env.REDIRECT_URI}/done?message=authFailure`);
               });
             })
             .catch(() => {
@@ -73,10 +73,10 @@ export const getTokens = (req, res) => {
               };
               user.save()
                 .then(() => {
-                  res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
+                  res.redirect(`${process.env.REDIRECT_URI}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
                 })
                 .catch(() => {
-                  res.redirect(`${redirectUri}/done?message=authFailure`);
+                  res.redirect(`${process.env.REDIRECT_URI}/done?message=authFailure`);
                 });
             });
         })
@@ -92,7 +92,7 @@ export const refreshTokens = (req, res) => {
   const { refreshToken } = req.params;
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}` },
+    headers: { Authorization: `Basic ${Buffer.from(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`).toString('base64')}` },
     form: {
       grant_type: 'refresh_token',
       refreshToken,
