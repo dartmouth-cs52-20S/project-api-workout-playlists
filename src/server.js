@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import apiRouter from './router';
 
+
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/tempo';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 mongoose.Promise = global.Promise;
