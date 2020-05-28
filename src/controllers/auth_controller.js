@@ -44,11 +44,9 @@ export const getTokens = (req, res) => {
       axios.get('https://api.spotify.com/v1/me', { headers: { Authorization: `Bearer ${accessToken}` } })
         .then((result) => {
           const spotifyID = result.data.id;
-          console.log('got spotifyID', spotifyID);
           User.findOne({ spotifyID })
             .then((r) => {
-              console.log(r);
-              if (r === null) {
+              if (!r) {
                 User.findOneAndUpdate(
                   { spotifyID },
                   {
@@ -60,24 +58,22 @@ export const getTokens = (req, res) => {
                   },
                   { new: true },
                 ).then(() => {
-                  res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
+                  res.redirect(`${redirectUri}/done?message=authSuccess?spotifyID=${spotifyID}`);
                 }).catch(() => {
                   res.redirect(`${redirectUri}/done?message=authFailure`);
                 });
               } else {
-                console.log('not found, now saving');
-                const user = {
+                const user = new User({
                   spotifyID,
                   accessToken,
                   refreshToken,
-                };
+                });
+                console.log(user);
                 user.save()
                   .then(() => {
-                    console.log('just saved');
                     res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
                   })
-                  .catch(() => {
-                    console.log('could not save');
+                  .catch((err) => {
                     res.redirect(`${redirectUri}/done?message=authFailure`);
                   });
               }
