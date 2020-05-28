@@ -28,11 +28,20 @@
     "@babel/preset-env": "^7.9.5",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
+<<<<<<< HEAD
+    "cookie-parser": "^1.4.5",
+=======
+>>>>>>> d400e2bb1e044d551fe8eaa5f2bff125d20b7808
     "cors": "^2.8.5",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
     "mongoose": "^5.9.15",
+<<<<<<< HEAD
+    "morgan": "^1.10.0",
+    "request": "^2.88.2"
+=======
     "morgan": "^1.10.0"
+>>>>>>> d400e2bb1e044d551fe8eaa5f2bff125d20b7808
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

@@ -4,8 +4,8 @@ import User from '../models/user_model';
 // const spotifyUrl = 'https://api.spotify.com/api';
 
 // for preliminary testing between front and back
-export const startUser = (req, res, next) => {
-  const { spotifyID } = req.body;
+export const updateUser = (req, res, next) => {
+  const { spotifyID } = req.params;
   const { genres } = req.body;
   const { acousticness } = req.body;
   const { instrumentalness } = req.body;
@@ -17,23 +17,26 @@ export const startUser = (req, res, next) => {
   if (!spotifyID) {
     res.status(422).send('error');
   } else {
-    const user = new User({
-      spotifyID,
-      genres,
-      acousticness,
-      instrumentalness,
-      liveness,
-      loudness,
-      popularity,
-      valence,
+    User.findOneAndUpdate(
+      { spotifyID },
+      {
+        $set:
+          {
+            genres,
+            acousticness,
+            instrumentalness,
+            liveness,
+            loudness,
+            popularity,
+            valence,
+          },
+      },
+      { new: true },
+    ).then((result) => {
+      res.send(result);
+    }).catch((error) => {
+      res.status(500).json({ error });
     });
-    user.save()
-      .then(() => {
-        res.json({ message: 'User created!' });
-      })
-      .catch((error) => {
-        res.status(500).json({ error });
-      });
   }
 };
 
@@ -136,4 +139,3 @@ export const getUser = (req, res) => {
 //     res.status(500).json({ error });
 //   });
 // };
-// heroku test

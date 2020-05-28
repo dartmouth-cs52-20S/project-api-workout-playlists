@@ -1,6 +1,6 @@
 import { Router } from 'express';
-// import spotifyCredentials from 'secrets.js';
 import * as UserController from './controllers/user_controller';
+import * as AuthController from './controllers/auth_controller';
 
 const router = Router();
 
@@ -8,25 +8,25 @@ router.get('/', (req, res) => {
   res.json({ message: 'Hello World' });
 });
 
-// router.get('/spotify-credentials', (req, res, next) => {
-//   // const clientId = process.env.clientId;
-//   // const clientSecret = process.env.clientSecret;
-//   // const redirectUri = process.env.redirectUri;
-//   // const spotifyCredentials = { clientId, clientSecret, redirectUri };
-//   res.json(spotifyCredentials);
-// });
-
 // router.route('/authorize')
 //   .put(UserController.setUser);
 
 // router.route('/preferences')
 //   .put(UserController.userPreferences);
 
-router.route('/newuser')
-  .post(UserController.startUser);
+// routes for preliminary new user amd getting user
+router.route('/update')
+  .put(UserController.updateUser);
 
 router.route('/getuser/:ID')
   .get(UserController.getUser);
 
+// routes for spotify oauth
+router.route('/callback')
+  .get(AuthController.getTokens)
+  .post(AuthController.getTokens);
+
+router.route('/:accessToken')
+  .get(AuthController.refreshTokens);
 
 export default router;
