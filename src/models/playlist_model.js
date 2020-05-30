@@ -13,9 +13,12 @@ const PlaylistSchema = new Schema({
   // tempo during beginning, middle, or have it be consistent. Perhaps later we can let users choose
   // at what point during the workout they want to amp up or amp down
 
-  energyFlag: { type: Boolean }, // -1 if beginning, 0 if none, 1 if end
-  loudnessFlag: { type: Boolean }, // -1 if beginning, 0 if none, 1 if end
+  energyFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
+  loudnessFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
   tempoFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
+
+
+  // ADD DANCEABILITY HERE
 
   songs: { type: Array },
 
