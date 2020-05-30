@@ -26,4 +26,8 @@ router.route('/:accessToken')
 router.route('/makeplaylist')
   .post(PlaylistController.createPlaylist);
 
+router.route('/makeplaylist/:playlistID')
+  .get(PlaylistController.getPlaylist);
+
+
 export default router;
