@@ -106,3 +106,14 @@ export const getPlaylist = (req, res) => {
       res.status(500).json({ error });
     });
 };
+
+export const getPlaylists = (req, res) => {
+  Playlist.find()
+    .populate('user')
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};

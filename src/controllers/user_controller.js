@@ -1,7 +1,4 @@
-// import axios from 'axios';
 import User from '../models/user_model';
-
-// const spotifyUrl = 'https://api.spotify.com/api';
 
 export const updateUser = (req, res, next) => {
   const { spotifyID } = req.params;
@@ -41,7 +38,6 @@ export const updateUser = (req, res, next) => {
 
 // get user information
 export const getUser = (req, res) => {
-  console.log(req.params.spotifyID);
   User.findOne({ spotifyID: req.params.spotifyID })
     .then((result) => {
       if (result) {
@@ -50,7 +46,5 @@ export const getUser = (req, res) => {
         res.send('no user found');
       }
     })
-    .catch((error) => {
-      res.status(500).json({ error });
-    });
+    .catch((error) => { res.status(500).json({ error }); });
 };

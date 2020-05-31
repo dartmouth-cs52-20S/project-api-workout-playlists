@@ -19,7 +19,6 @@ export const getTokens = (req, res) => {
   // after checking the state parameter
 
   const code = req.query.code || null;
-  console.log('getting tokens');
 
   res.clearCookie(stateKey);
   const authOptions = {
@@ -40,14 +39,12 @@ export const getTokens = (req, res) => {
     if (!error && response.statusCode === 200) {
       const accessToken = body.access_token;
       const refreshToken = body.refresh_token;
-      console.log('got tokens!!');
       axios.get('https://api.spotify.com/v1/me', { headers: { Authorization: `Bearer ${accessToken}` } })
         .then((result) => {
           const spotifyID = result.data.id;
           User.findOne({ spotifyID })
             .then((r) => {
               if (r) {
-                console.log('inside if not r');
                 User.findOneAndUpdate(
                   { spotifyID },
                   {
@@ -69,7 +66,6 @@ export const getTokens = (req, res) => {
                   accessToken,
                   refreshToken,
                 });
-                console.log(user);
                 user.save()
                   .then(() => {
                     res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
