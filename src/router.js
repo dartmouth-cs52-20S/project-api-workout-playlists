@@ -34,9 +34,9 @@ router.route('/playlist/:playlistID')
   .get(PlaylistController.getPlaylist);
 
 // player controller routes
-router.get('/playback/:token', PlayerController.getPlayback);
-router.put('/play/:token', PlayerController.sendPlay);
-router.put('/pause/:token', PlayerController.sendPause);
+router.get('/playback/:accessToken', PlayerController.getPlayback);
+router.put('/play/:accessToken', PlayerController.sendPlay);
+router.put('/pause/:accessToken', PlayerController.sendPause);
 
 
 export default router;
