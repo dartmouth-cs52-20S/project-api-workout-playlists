@@ -108,6 +108,7 @@ export const getPlaylist = (req, res) => {
 };
 
 export const getPlaylists = (req, res) => {
+  console.log('into get playlists BE');
   Playlist.find()
     .populate('user')
     .then((result) => {
