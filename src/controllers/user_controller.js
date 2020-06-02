@@ -38,15 +38,13 @@ export const updateUser = (req, res, next) => {
 
 // get user information
 export const getUser = (req, res) => {
-  console.log('inside get user back end ', req.params);
-  User.find({ spotifyID: req.params.spotifyID })
+  User.findOne({ spotifyID: req.params.spotifyID })
     .then((result) => {
-      console.log('after find');
       if (result) {
         res.send(result);
       } else {
         res.send('no user found');
       }
     })
-    .catch((error) => { res.status(500).json({ error }); });
+    .catch(() => { res.status(500).json({ error: 'Could not find user' }); });
 };
