@@ -22,9 +22,6 @@ router.route('/callback')
   .get(AuthController.getTokens)
   .post(AuthController.getTokens);
 
-router.route('/:accessToken')
-  .get(AuthController.refreshTokens);
-
 // playlist controller routes
 router.route('/playlist')
   .post(PlaylistController.createPlaylist)
@@ -41,5 +38,7 @@ router.put('/play/:accessToken', PlayerController.sendPlay);
 router.put('/pause/:accessToken', PlayerController.sendPause);
 router.post('/next/:accessToken', PlayerController.sendNext);
 
+router.route('/:accessToken')
+  .get(AuthController.refreshTokens);
 
 export default router;

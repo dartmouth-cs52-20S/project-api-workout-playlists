@@ -38,8 +38,10 @@ export const updateUser = (req, res, next) => {
 
 // get user information
 export const getUser = (req, res) => {
-  User.findOne({ spotifyID: req.params.spotifyID })
+  console.log('inside get user back end ', req.params);
+  User.find({ spotifyID: req.params.spotifyID })
     .then((result) => {
+      console.log('after find');
       if (result) {
         res.send(result);
       } else {
