@@ -19,7 +19,7 @@ export const sendPlay = (req, res) => {
       axios.put(`${playerURL}/play/?device_id=${deviceId}`, { uris: req.body },
         { headers: { authorization: `Bearer ${req.params.accessToken}` } })
         .then(() => { return console.log('should b playin rn'); })
-        .catch((err) => { return console.log('play error: ', err); });
+        .catch((err) => { return console.log('play error: ', err.response.data); });
     })
     .catch((error) => {
       console.log(`spotify api device error: ${error}`);
