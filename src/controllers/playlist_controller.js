@@ -6,7 +6,6 @@ import Playlist from '../models/playlist_model';
 const spotifyUrl = 'https://api.spotify.com';
 
 export const createPlaylist = (req, res) => {
-  console.log('into create playlist BE');
   const range = 0.5;
   const length = Math.floor(req.body.workoutLength / 2) + 1;
   const LENGTH = length;
@@ -75,11 +74,10 @@ function getSongs(req, res, length, range, LENGTH) {
         });
         playlist.save()
           .then((result) => {
-            console.log('creating playlist at end');
             res.send(result);
           })
-          .catch((error) => {
-            res.status(500).json({ error });
+          .catch(() => {
+            res.status(500).json({ error: 'could not save playlist to database' });
           });
       }
     })
@@ -115,15 +113,14 @@ const getTrackUris = (playlist) => {
 
   // eslint-disable-next-line array-callback-return
   playlist.songs.map((song) => {
-    console.log(song);
     uris.push(song.uri);
   });
+
   return uris;
 };
 
 // takes spotify id and playlist
 export const savePlaylist = (req, res) => {
-  console.log('dis', req.body);
   axios.post(`${spotifyUrl}/v1/users/${req.body.spotifyID}/playlists`,
     { name: `Tempo: ${req.body.playlist.workoutType} ${req.body.playlist.createdAt}` },
     {
@@ -147,7 +144,7 @@ export const savePlaylist = (req, res) => {
         .then((res) => {
           console.log('added songs to playlist with snapshot id:', res);
         })
-        .catch((err) => { console.log('failed to add songs to playlist:', err); });
+        .catch(() => { console.log('failed to add songs to playlist'); });
     })
-    .catch((err) => { console.log('failed to make empty playlist:', err); });
+    .catch(() => { console.log('failed to make empty playlist'); });
 };

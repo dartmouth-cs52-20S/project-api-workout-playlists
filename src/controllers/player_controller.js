@@ -3,7 +3,6 @@ import axios from 'axios';
 const playerURL = 'https://api.spotify.com/v1/me/player';
 
 export const getPlayback = (req, res) => {
-  console.log('token: ', req.params.accessToken);
   axios.get(`${playerURL}`, { headers: { authorization: `Bearer ${req.params.accessToken}` } })
     .then((r) => { res.json(r.data); })
     .catch((error) => { console.log(`spotify api get error: ${error}`); });
@@ -14,17 +13,10 @@ export const sendPlay = (req, res) => {
   axios.get(`${playerURL}/devices`, { headers: { authorization: `Bearer ${req.params.accessToken}` } })
     .then((response) => {
       const deviceId = response.data.devices[0].id;
-      if (typeof req.body === 'undefined') {
-        axios.put(`${playerURL}/play/?device_id=${deviceId}`, {},
-          { headers: { authorization: `Bearer ${req.params.accessToken}` } })
-          .then(() => { return console.log('should b playin rn'); })
-          .catch((err) => { return console.log('play error: ', err.response.data); });
-      } else {
-        axios.put(`${playerURL}/play/?device_id=${deviceId}`, { uris: req.body },
-          { headers: { authorization: `Bearer ${req.params.accessToken}` } })
-          .then(() => { return console.log('should b playin rn'); })
-          .catch((err) => { return console.log('play error: ', err.response.data); });
-      }
+      axios.put(`${playerURL}/play/?device_id=${deviceId}`, req.body,
+        { headers: { authorization: `Bearer ${req.params.accessToken}` } })
+        .then(() => { return console.log('should b playin rn'); })
+        .catch((err) => { return console.log('play error: ', err.response.data); });
     })
     .catch((error) => {
       console.log(`spotify api device error: ${error}`);
