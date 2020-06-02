@@ -30,6 +30,7 @@ router.route('/playlist')
   .post(PlaylistController.createPlaylist)
   .get(PlaylistController.getPlaylists);
 
+router.post('/save/:accessToken', PlaylistController.savePlaylist);
 
 router.route('/playlist/:playlistID')
   .get(PlaylistController.getPlaylist);

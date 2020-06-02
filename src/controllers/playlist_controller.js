@@ -56,7 +56,6 @@ function getSongs(req, res, length, range, LENGTH) {
     },
     headers: { authorization: `Bearer ${req.body.user.accessToken}` },
   })
-    // eslint-disable-next-line no-loop-func
     .then((response) => {
       console.log('length', response.data.tracks.length);
       if (response.data.tracks.length < length) {
@@ -109,4 +108,46 @@ export const getPlaylists = (req, res) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
+};
+
+const getTrackUris = (playlist) => {
+  const uris = [];
+
+  // eslint-disable-next-line array-callback-return
+  playlist.songs.map((song) => {
+    console.log(song);
+    uris.push(song.uri);
+  });
+  return uris;
+};
+
+// takes spotify id and playlist
+export const savePlaylist = (req, res) => {
+  console.log('dis', req.body);
+  axios.post(`${spotifyUrl}/v1/users/${req.body.spotifyID}/playlists`,
+    { name: `Tempo: ${req.body.playlist.workoutType} ${req.body.playlist.createdAt}` },
+    {
+      headers:
+      {
+        authorization: `Bearer ${req.params.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((result) => {
+      const uris = getTrackUris(req.body.playlist);
+      axios.post(`${spotifyUrl}/v1/playlists/${result.data.id}/tracks`,
+        { uris },
+        {
+          headers:
+      {
+        authorization: `Bearer ${req.params.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+        })
+        .then((res) => {
+          console.log('added songs to playlist with snapshot id:', res);
+        })
+        .catch((err) => { console.log('failed to add songs to playlist:', err); });
+    })
+    .catch((err) => { console.log('failed to make empty playlist:', err); });
 };
