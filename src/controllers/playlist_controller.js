@@ -31,7 +31,6 @@ export const createPlaylist = (req, res) => {
 };
 
 function getSongs(req, res, length, range, LENGTH) {
-
   const min_tempo = req.body.averageTempo;
   let max_tempo = min_tempo + 5;
   if (req.body.energyFlag !== 0) {
@@ -99,7 +98,6 @@ function getSongs(req, res, length, range, LENGTH) {
                 sortedTracks = tracks;
                 break;
             }
-            console.log(sortedTracks);
             const playlist = new Playlist({
               songs: sortedTracks,
               user: req.body.user.id,
