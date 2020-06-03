@@ -87,6 +87,7 @@ function getSongs(req, res, length, range, LENGTH) {
               tracks[i].audioFeatures = result.data.audio_features[i];
             }
             let sortedTracks = [];
+            // console.log(tracks);
             switch (req.body.energyFlag) {
               case -1:
                 sortedTracks = tracks.sort(decreasing);
