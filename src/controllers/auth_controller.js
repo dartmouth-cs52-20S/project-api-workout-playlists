@@ -9,8 +9,8 @@ const request = require('request');
 
 dotenv.config({ silent: true });
 
-// const redirectUri = 'https://workout-playlists-final-proj.herokuapp.com/api/callback';
-const redirectUri = 'http://localhost:9090/api/callback';
+const redirectUri = 'https://workout-playlists-final-proj.herokuapp.com/api/callback';
+// const redirectUri = 'http://localhost:9090/api/callback';
 const clientSecret = 'e87f33cedc0f49d2b38e23aac704567d';
 const clientId = 'ae55627afa544de2b83131f8bd07d685';
 
