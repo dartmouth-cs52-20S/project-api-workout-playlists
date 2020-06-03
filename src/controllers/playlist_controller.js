@@ -5,23 +5,17 @@ import Playlist from '../models/playlist_model';
 
 const spotifyUrl = 'https://api.spotify.com';
 
-// let ids = '';
+function increasing(a, b) {
+  if (a.audioFeatures.tempo < b.audioFeatures.tempo) return -1;
+  if (a.audioFeatures.tempo > b.audioFeatures.tempo) return 1;
+  return 0;
+}
 
-// function makeIds(track) {
-//   ids += `${track.id},`;
-// }
-
-// function increasing(a, b) {
-//   if (a.audioFeatures.tempo < b.audioFeatures.tempo) return -1;
-//   if (a.audioFeatures.tempo > b.audioFeatures.tempo) return 1;
-//   return 0;
-// }
-
-// function decreasing(a, b) {
-//   if (a.audioFeatures.tempo > b.audioFeatures.tempo) return -1;
-//   if (a.audioFeatures.tempo < b.audioFeatures.tempo) return 1;
-//   return 0;
-// }
+function decreasing(a, b) {
+  if (a.audioFeatures.tempo > b.audioFeatures.tempo) return -1;
+  if (a.audioFeatures.tempo < b.audioFeatures.tempo) return 1;
+  return 0;
+}
 
 export const createPlaylist = (req, res) => {
   const range = 0.5;
@@ -75,70 +69,77 @@ function getSongs(req, res, length, range, LENGTH) {
   })
     .then((response) => {
       console.log('length', response.data.tracks.length);
+      if (response.data.tracks.length === 0) {
+        res.send({ error: 'Could not find any tracks' });
+      }
       if (response.data.tracks.length < length) {
         getSongs(req, res, length - 3, range + 0.25, LENGTH);
       } else {
         const tracks = response.data.tracks.slice(0, Math.min(LENGTH, response.data.tracks.length));
-        // tracks.forEach(makeIds);
-        // axios.get(`${spotifyUrl}/v1/audio-features/?ids=${ids.substring(0, ids.length - 1)}`, { headers: { authorization: `Bearer ${req.body.user.accessToken}` } })
-        //   .then((result) => {
-        //     // eslint-disable-next-line no-plusplus
-        //     for (let i = 0, len = result.data.audio_features.length; i < len; i++) {
-        //       tracks[i].audioFeatures = result.data.audio_features[i];
-        //     }
-        //     let sortedTracks = tracks;
-        //     switch (req.body.energyFlag) {
-        //       case (-1):
-        //         sortedTracks = tracks.sort(decreasing);
-        //         break;
-        //       case 1:
-        //         sortedTracks = tracks.sort(increasing);
-        //         break;
-        //       default:
-        //         sortedTracks = tracks;
-        //         break;
-        //     }
-        //     // console.log(sortedTracks);
-        //     const playlist = new Playlist({
-        //       songs: sortedTracks,
-        //       user: req.body.user.id,
-        //       workoutType: req.body.workoutType,
-        //       averageTempo: req.body.averageTempo,
-        //       workoutGenre: req.body.workoutGenre,
-        //       workoutLength: req.body.workoutLength,
-        //       energyFlag: req.body.energyFlag,
-        //       loudnessFlag: req.body.loudnessFlag,
-        //       tempoFlag: req.body.tempoFlag,
-        //     });
-        //     playlist.save()
-        //       .then((r) => {
-        //         res.send(r);
-        //       })
-        //       .catch(() => {
-        //         res.status(500).json({ error: 'could not save playlist to database' });
-        //       });
-        //   })
-        //   .catch((error) => {
-        //     console.log(`spotify api get features error: ${error}`);
-        //   });
-        const playlist = new Playlist({
-          songs: tracks,
-          user: req.body.user.id,
-          workoutType: req.body.workoutType,
-          averageTempo: req.body.averageTempo,
-          workoutGenre: req.body.workoutGenre,
-          workoutLength: req.body.workoutLength,
-          energyFlag: req.body.energyFlag,
-          loudnessFlag: req.body.loudnessFlag,
-          tempoFlag: req.body.tempoFlag,
-        });
-        playlist.save()
-          .then((r) => {
-            res.send(r);
+        let ids = '';
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0, len = tracks.length; i < len; i++) {
+          ids += `${tracks[i].id},`;
+        }
+        axios.get(`${spotifyUrl}/v1/audio-features/?ids=${ids.substring(0, ids.length - 1)}`, { headers: { authorization: `Bearer ${req.body.user.accessToken}` } })
+          .then((result) => {
+            // eslint-disable-next-line no-plusplus
+            for (let i = 0, len = result.data.audio_features.length; i < len; i++) {
+              tracks[i].audioFeatures = result.data.audio_features[i];
+            }
+            let sortedTracks = tracks;
+            switch (req.body.energyFlag) {
+              case (-1):
+                sortedTracks = tracks.sort(decreasing);
+                break;
+              case 1:
+                sortedTracks = tracks.sort(increasing);
+                break;
+              default:
+                sortedTracks = tracks;
+                break;
+            }
+            console.log(sortedTracks);
+            const playlist = new Playlist({
+              songs: sortedTracks,
+              user: req.body.user.id,
+              workoutType: req.body.workoutType,
+              averageTempo: req.body.averageTempo,
+              workoutGenre: req.body.workoutGenre,
+              workoutLength: req.body.workoutLength,
+              energyFlag: req.body.energyFlag,
+              loudnessFlag: req.body.loudnessFlag,
+              tempoFlag: req.body.tempoFlag,
+            });
+            playlist.save()
+              .then((r) => {
+                res.send(r);
+              })
+              .catch(() => {
+                res.status(500).json({ error: 'could not save playlist to database' });
+              });
           })
-          .catch(() => {
-            res.status(500).json({ error: 'could not save playlist to database' });
+          .catch((error) => {
+            console.log(`spotify api get features error: ${error}`);
           });
+        // const playlist = new Playlist({
+        //   songs: tracks,
+        //   user: req.body.user.id,
+        //   workoutType: req.body.workoutType,
+        //   averageTempo: req.body.averageTempo,
+        //   workoutGenre: req.body.workoutGenre,
+        //   workoutLength: req.body.workoutLength,
+        //   energyFlag: req.body.energyFlag,
+        //   loudnessFlag: req.body.loudnessFlag,
+        //   tempoFlag: req.body.tempoFlag,
+        // });
+        // playlist.save()
+        //   .then((r) => {
+        //     res.send(r);
+        //   })
+        //   .catch(() => {
+        //     res.status(500).json({ error: 'could not save playlist to database' });
+        //   });
       }
     })
     .catch((error) => {
