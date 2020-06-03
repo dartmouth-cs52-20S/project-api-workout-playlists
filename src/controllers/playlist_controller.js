@@ -88,7 +88,7 @@ function getSongs(req, res, length, range, LENGTH) {
             }
             let sortedTracks = tracks;
             switch (req.body.energyFlag) {
-              case -1:
+              case (-1):
                 sortedTracks = tracks.sort(decreasing);
                 break;
               case 1:
