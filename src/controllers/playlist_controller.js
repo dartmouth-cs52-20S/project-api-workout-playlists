@@ -86,8 +86,7 @@ function getSongs(req, res, length, range, LENGTH) {
             for (let i = 0, len = result.data.audio_features.length; i < len; i++) {
               tracks[i].audioFeatures = result.data.audio_features[i];
             }
-            let sortedTracks = [];
-            // console.log(tracks);
+            let sortedTracks = tracks;
             switch (req.body.energyFlag) {
               case -1:
                 sortedTracks = tracks.sort(decreasing);
@@ -99,6 +98,7 @@ function getSongs(req, res, length, range, LENGTH) {
                 sortedTracks = tracks;
                 break;
             }
+            // console.log(sortedTracks);
             const playlist = new Playlist({
               songs: sortedTracks,
               user: req.body.user.id,
