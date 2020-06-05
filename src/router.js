@@ -24,7 +24,9 @@ router.route('/callback')
 
 // playlist controller routes
 router.route('/playlist')
-  .post(PlaylistController.createPlaylist)
+  .post(PlaylistController.createPlaylist);
+
+router.route('/playlists/:id')
   .get(PlaylistController.getPlaylists);
 
 router.post('/save/:accessToken', PlaylistController.savePlaylist);

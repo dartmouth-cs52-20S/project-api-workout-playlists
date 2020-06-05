@@ -99,7 +99,6 @@ function getSongs(req, res, length, range, LENGTH) {
                 sortedTracks = tracks;
                 break;
             }
-            console.log(sortedTracks);
             const playlist = new Playlist({
               songs: sortedTracks,
               user: req.body.user.id,
@@ -122,24 +121,6 @@ function getSongs(req, res, length, range, LENGTH) {
           .catch((error) => {
             console.log(`spotify api get features error: ${error}`);
           });
-        // const playlist = new Playlist({
-        //   songs: tracks,
-        //   user: req.body.user.id,
-        //   workoutType: req.body.workoutType,
-        //   averageTempo: req.body.averageTempo,
-        //   workoutGenre: req.body.workoutGenre,
-        //   workoutLength: req.body.workoutLength,
-        //   energyFlag: req.body.energyFlag,
-        //   loudnessFlag: req.body.loudnessFlag,
-        //   tempoFlag: req.body.tempoFlag,
-        // });
-        // playlist.save()
-        //   .then((r) => {
-        //     res.send(r);
-        //   })
-        //   .catch(() => {
-        //     res.status(500).json({ error: 'could not save playlist to database' });
-        //   });
       }
     })
     .catch((error) => {
@@ -159,7 +140,7 @@ export const getPlaylist = (req, res) => {
 };
 
 export const getPlaylists = (req, res) => {
-  Playlist.find()
+  Playlist.find({ user: req.params.id })
     .populate('user')
     .then((result) => {
       res.send(result);
@@ -171,7 +152,6 @@ export const getPlaylists = (req, res) => {
 
 const getTrackUris = (playlist) => {
   const uris = [];
-
   // eslint-disable-next-line array-callback-return
   playlist.songs.map((song) => {
     uris.push(song.uri);
