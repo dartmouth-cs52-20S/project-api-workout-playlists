@@ -32,7 +32,8 @@ router.route('/playlists/:id')
 router.post('/save/:accessToken', PlaylistController.savePlaylist);
 
 router.route('/playlist/:playlistID')
-  .get(PlaylistController.getPlaylist);
+  .get(PlaylistController.getPlaylist)
+  .delete(PlaylistController.deletePlaylist);
 
 // player controller routes
 router.get('/playback/:accessToken', PlayerController.getPlayback);
