@@ -151,6 +151,7 @@ export const deletePlaylist = (req, res) => {
 
 export const getPlaylists = (req, res) => {
   Playlist.find({ user: req.params.id })
+    .sort({ createdAt: -1 })
     .populate('user')
     .then((result) => {
       res.send(result);
