@@ -139,6 +139,16 @@ export const getPlaylist = (req, res) => {
     });
 };
 
+export const deletePlaylist = (req, res) => {
+  Playlist.findByIdAndDelete(req.params.playlistID)
+    .then(() => {
+      res.json({ message: 'deleted playlist' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
 export const getPlaylists = (req, res) => {
   Playlist.find({ user: req.params.id })
     .populate('user')
