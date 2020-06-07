@@ -150,6 +150,24 @@ export const deletePlaylist = (req, res) => {
     });
 };
 
+export const updatePlaylist = (req, res) => {
+  console.log('into update BE');
+  Playlist.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: {
+        playlistName: req.body.playlistName,
+      },
+    },
+    { new: true },
+  ).then((result) => {
+    res.send(result);
+  })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+};
+
 export const getPlaylists = (req, res) => {
   Playlist.find({ user: req.params.id })
     .sort({ createdAt: -1 })
