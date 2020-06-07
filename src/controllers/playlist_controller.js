@@ -109,6 +109,7 @@ function getSongs(req, res, length, range, LENGTH) {
               energyFlag: req.body.energyFlag,
               loudnessFlag: req.body.loudnessFlag,
               tempoFlag: req.body.tempoFlag,
+              playlistName: req.body.playlistName,
             });
             playlist.save()
               .then((r) => {
