@@ -25,13 +25,13 @@ function frequency(arr) {
 export const updateUser = (req, res, next) => {
   axios.get(`${spotifyUrl}/v1/me/top/artists?time_range=medium_term`, { headers: { authorization: `Bearer ${req.body.accessToken}` } })
     .then((result) => {
-      let genres = [];
+      const allgenres = [];
       for (let i = 0, len = result.data.items.length; i < len; i++) {
-        for (let j = 0, l = result.data.items[i].length; j < l; j++) {
-          genres += `${result.data.items[i].genre[j]},`;
+        for (let j = 0, l = result.data.items[i].genres.length; j < l; j++) {
+          allgenres.push(result.data.items[i].genres[j]);
         }
       }
-      const frequencies = frequency(genres);
+      const frequencies = frequency(allgenres);
       const topGenres = [];
       for (let i = 0; i < frequencies[1].length; i++) {
         if (frequencies[1][i] >= 2) {
