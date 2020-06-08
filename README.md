@@ -1,4 +1,4 @@
-# Workout Playlists
+# Tempo - Workout Playlists API
 
 ![](https://i.imgur.com/MJr8KLd.jpg)
 
