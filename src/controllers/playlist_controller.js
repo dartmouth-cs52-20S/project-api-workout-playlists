@@ -192,7 +192,7 @@ const getTrackUris = (playlist) => {
 // takes spotify id and playlist
 export const savePlaylist = (req, res) => {
   axios.post(`${spotifyUrl}/v1/users/${req.body.spotifyID}/playlists`,
-    { name: `Tempo: ${req.body.playlist.workoutType} ${req.body.playlist.createdAt}` },
+    { name: req.body.playlist.playlistName },
     {
       headers:
       {
