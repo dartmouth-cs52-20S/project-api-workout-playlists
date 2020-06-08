@@ -2,7 +2,6 @@ import mongoose, { Schema } from 'mongoose';
 
 const UserSchema = new Schema({
 
-  // will be needed once auth is up and runnign
   accessToken: { type: String },
   refreshToken: { type: String },
   spotifyID: { type: String },

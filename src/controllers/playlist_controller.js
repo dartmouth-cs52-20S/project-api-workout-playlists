@@ -1,5 +1,7 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable camelcase */
 /* eslint-disable import/prefer-default-export */
+
 import axios from 'axios';
 import Playlist from '../models/playlist_model';
 
@@ -77,13 +79,11 @@ function getSongs(req, res, length, range, LENGTH) {
       } else {
         const tracks = response.data.tracks.slice(0, Math.min(LENGTH, response.data.tracks.length));
         let ids = '';
-        // eslint-disable-next-line no-plusplus
         for (let i = 0, len = tracks.length; i < len; i++) {
           ids += `${tracks[i].id},`;
         }
         axios.get(`${spotifyUrl}/v1/audio-features/?ids=${ids.substring(0, ids.length - 1)}`, { headers: { authorization: `Bearer ${req.body.user.accessToken}` } })
           .then((result) => {
-            // eslint-disable-next-line no-plusplus
             for (let i = 0, len = result.data.audio_features.length; i < len; i++) {
               tracks[i].audioFeatures = result.data.audio_features[i];
             }
@@ -151,7 +151,6 @@ export const deletePlaylist = (req, res) => {
 };
 
 export const updatePlaylist = (req, res) => {
-  console.log('into update BE');
   Playlist.findByIdAndUpdate(
     req.params.id,
     {
