@@ -1,5 +1,4 @@
 import axios from 'axios';
-// import spotifyCredentials from '../secrets';
 import dotenv from 'dotenv';
 
 import User from '../models/user_model';
@@ -8,11 +7,6 @@ const stateKey = 'spotify_auth_state';
 const request = require('request');
 
 dotenv.config({ silent: true });
-
-// const redirectUri = 'https://workout-playlists-final-proj.herokuapp.com/api/callback';
-const redirectUri = 'http://localhost:9090/api/callback';
-const clientSecret = 'e87f33cedc0f49d2b38e23aac704567d';
-const clientId = 'ae55627afa544de2b83131f8bd07d685';
 
 // authorization code returned by the first call and the client secret key
 export const getTokens = (req, res) => {
@@ -26,11 +20,11 @@ export const getTokens = (req, res) => {
     url: 'https://accounts.spotify.com/api/token',
     form: {
       code,
-      redirect_uri: redirectUri,
+      redirect_uri: process.env.redirectUri,
       grant_type: 'authorization_code',
     },
     headers: {
-      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+      Authorization: `Basic ${Buffer.from(`${process.env.clientId}:${process.env.clientSecret}`).toString('base64')}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     json: true,
@@ -57,9 +51,9 @@ export const getTokens = (req, res) => {
                   },
                   { new: true },
                 ).then(() => {
-                  res.redirect(`${redirectUri}/done?message=authSuccess?spotifyID=${spotifyID}`);
+                  res.redirect(`${process.env.redirectUri}/done?message=authSuccess?spotifyID=${spotifyID}`);
                 }).catch(() => {
-                  res.redirect(`${redirectUri}/done?message=authFailure`);
+                  res.redirect(`${process.env.redirectUri}/done?message=authFailure`);
                 });
               } else {
                 const user = new User({
@@ -69,10 +63,10 @@ export const getTokens = (req, res) => {
                 });
                 user.save()
                   .then(() => {
-                    res.redirect(`${redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
+                    res.redirect(`${process.env.redirectUri}/done?message=authSuccess?token=${accessToken}?spotifyID=${spotifyID}`);
                   })
                   .catch((err) => {
-                    res.redirect(`${redirectUri}/done?message=authFailure`);
+                    res.redirect(`${process.env.redirectUri}/done?message=authFailure`);
                   });
               }
             })
@@ -92,7 +86,7 @@ export const refreshTokens = (req, res) => {
   const { refreshToken } = req.params;
   const authOptions = {
     url: 'https://api.spotify.com/api/token',
-    headers: { Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}` },
+    headers: { Authorization: `Basic ${Buffer.from(`${process.env.clientId}:${process.env.clientSecret}`).toString('base64')}` },
     form: {
       grant_type: 'refresh_token',
       refreshToken,

@@ -14,12 +14,8 @@ const PlaylistSchema = new Schema({
   // at what point during the workout they want to amp up or amp down
 
   energyFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
-  loudnessFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
-  tempoFlag: { type: Number }, // -1 if beginning, 0 if none, 1 if end
+
   playlistName: { type: String }, // playlist name
-
-
-  // ADD DANCEABILITY HERE
 
   songs: { type: Array },
 
