@@ -9,34 +9,29 @@ We're interested in making it easier and more enjoyable for people to work out. 
 
 This is the API we made to handle requests for user authentication, playlist creation, and interaction with the Spotify API.
 
-### Sample Screenshots/Mockups
-
 ## Architecture
 
-
 ### Code Organization
-**Back end API use**
-1. User/Auth API
+1. Auth Controller
     * Communicates with FE about account/authentication
     * Sends account information to Spotify API
-
-2. Spotify API
-    * Takes info from user API to create create playlists based on user preferences
-    * (Potentially) takes info from Health API to influence playlist creation based off of workout intensity/duration
-    * Sends playlist to FE
-
+2. User Controller
+    * Stores user information in our database, including preferences and playlists
+3. Playlist Controller
+    * Communicates with Spotify to fetch songs for playlists
+    * Handles storing playlists and all other auxiliary functions
 
 ### Tools
-Spotify API, Authentication API 
+Spotify API
 
 ## Setup
 No setup involved for the APIs on a user end.
 
 ### Dev Environment Setup
-Getting an API key
+Client id, client secret obtained from Spotify, kept in env.
 
 ## Deployment
-The APIs are working in the background so there's no deployment on this side
+Deployed to Heroku.
 
 ## Authors
 
@@ -45,6 +40,6 @@ The APIs are working in the background so there's no deployment on this side
  * Elizabeth Wilson
  * Jennifer Qian
  * Isaiah Martin
- 
 
 ## Acknowledgments
+Spotify, our amAZING TA's Emma & Shosh, and last but not least, our incredible prof Tim Tregubov
