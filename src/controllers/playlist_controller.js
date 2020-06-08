@@ -72,7 +72,7 @@ function getSongs(req, res, length, range, LENGTH) {
     .then((response) => {
       console.log('length', response.data.tracks.length);
       if (response.data.tracks.length === 0) {
-        res.send({ error: 'Could not find any tracks' });
+        res.status(500).json({ error: 'could not find any tracks' });
       }
       if (response.data.tracks.length < length) {
         getSongs(req, res, length - 3, range + 0.25, LENGTH);
